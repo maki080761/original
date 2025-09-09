@@ -6,12 +6,10 @@ import { useKakeibo } from "@/hooks/useKakeibo";
 
 export default function CalendarPage() {
   const { shifts, expenses, extraIncomes, loading } = useKakeibo();
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedMonth, setSelectedMonth] = useState("");
 
   useEffect(() => {
     const now = new Date();
-    setCurrentDate(now);
     setSelectedMonth(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
   }, []);
 
