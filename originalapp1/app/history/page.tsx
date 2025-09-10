@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useKakeibo } from "@/hooks/useKakeibo";
 import { useSearchParams } from "next/navigation";
 
-export default function HistoryPage() {
+function HistoryContent() {
   const { shifts, expenses, extraIncomes, balance, loading, deleteShift, deleteExpense, deleteExtraIncome } = useKakeibo();
   const [activeTab, setActiveTab] = useState<"all" | "income" | "expense">("all");
   const [selectedDate, setSelectedDate] = useState("");
@@ -301,5 +301,17 @@ export default function HistoryPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function HistoryPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Cargando datos...</div>
+      </main>
+    }>
+      <HistoryContent />
+    </Suspense>
   );
 }

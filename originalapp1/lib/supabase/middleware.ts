@@ -35,6 +35,10 @@ export async function updateSession(request: NextRequest) {
           );
         },
       },
+      // Disable global features to reduce bundle size for middleware
+      global: {
+        headers: { 'X-Client-Info': 'supabase-ssr-middleware' },
+      },
     },
   );
 
@@ -47,13 +51,23 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  // Define protected routes that require authentication
+  const protectedRoutes = [
+    "/protected",
+    "/shift",
+    "/expense", 
+    "/extra-income",
+    "/monthly",
+    "/history",
+    "/calendar"
+  ];
+
+  const isProtectedRoute = protectedRoutes.some(route => 
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute && !user) {
+    // no user, redirect to login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
