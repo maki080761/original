@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="512" height="512" fill="#4ade80" rx="64"/>
+  
+  <!-- 電卓のイメージ -->
+  <rect x="128" y="128" width="256" height="320" fill="white" rx="16"/>
+  
+  <!-- 画面部分 -->
+  <rect x="152" y="152" width="208" height="64" fill="#1f2937" rx="8"/>
+  
+  <!-- 数字表示 -->
+  <text x="256" y="192" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">¥12,340</text>
+  
+  <!-- ボタン -->
+  <circle cx="176" cy="264" r="16" fill="#f3f4f6"/>
+  <circle cx="224" cy="264" r="16" fill="#f3f4f6"/>
+  <circle cx="272" cy="264" r="16" fill="#f3f4f6"/>
+  <circle cx="320" cy="264" r="16" fill="#ef4444"/>
+  
+  <circle cx="176" cy="312" r="16" fill="#f3f4f6"/>
+  <circle cx="224" cy="312" r="16" fill="#f3f4f6"/>
+  <circle cx="272" cy="312" r="16" fill="#f3f4f6"/>
+  <circle cx="320" cy="312" r="16" fill="#3b82f6"/>
+  
+  <circle cx="176" cy="360" r="16" fill="#f3f4f6"/>
+  <circle cx="224" cy="360" r="16" fill="#f3f4f6"/>
+  <circle cx="272" cy="360" r="16" fill="#f3f4f6"/>
+  <circle cx="320" cy="360" r="16" fill="#10b981"/>
+  
+  <!-- + と - の記号 -->
+  <text x="320" y="316" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">+</text>
+  <text x="320" y="268" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">-</text>
+</svg>
