@@ -4,13 +4,30 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useKakeibo } from "@/hooks/useKakeibo";
 
+interface JournalEntry {
+  id: string;
+  date: string;
+  title: string;
+  content: string;
+  timestamp: number;
+}
+
 export default function CalendarPage() {
   const { shifts, expenses, extraIncomes, loading } = useKakeibo();
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const now = new Date();
     setSelectedMonth(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
+    
+    // 日誌データを読み込み
+    const savedEntries = localStorage.getItem('journalEntries');
+    if (savedEntries) {
+      setJournalEntries(JSON.parse(savedEntries));
+    }
   }, []);
 
   if (loading) {
@@ -23,14 +40,14 @@ export default function CalendarPage() {
 
   // 選択された月の日別データを取得
   const getDailyData = () => {
-    const dailyData: Record<string, { income: number, expense: number }> = {};
+    const dailyData: Record<string, { income: number, expense: number, hasJournal: boolean }> = {};
     
     // シフト収入を集計
     shifts.forEach(shift => {
       if (shift.date.startsWith(selectedMonth)) {
         const day = shift.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0 };
+          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
         }
         dailyData[day].income += shift.totalIncome;
       }
@@ -41,7 +58,7 @@ export default function CalendarPage() {
       if (income.date.startsWith(selectedMonth)) {
         const day = income.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0 };
+          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
         }
         dailyData[day].income += income.amount;
       }
@@ -52,9 +69,20 @@ export default function CalendarPage() {
       if (expense.date.startsWith(selectedMonth)) {
         const day = expense.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0 };
+          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
         }
         dailyData[day].expense += expense.amount;
+      }
+    });
+
+    // 日誌データを集計
+    journalEntries.forEach(entry => {
+      if (entry.date.startsWith(selectedMonth)) {
+        const day = entry.date.split('-')[2];
+        if (!dailyData[day]) {
+          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
+        }
+        dailyData[day].hasJournal = true;
       }
     });
 
@@ -148,16 +176,32 @@ export default function CalendarPage() {
               const dayKey = String(day).padStart(2, '0');
               const data = dailyData[dayKey];
               const hasData = data && (data.income > 0 || data.expense > 0);
+              const hasJournal = data && data.hasJournal;
+              const fullDate = `${selectedMonth}-${dayKey}`;
+              const journalForDay = journalEntries.find(entry => entry.date === fullDate);
+
+              const handleDayClick = () => {
+                if (journalForDay) {
+                  setSelectedEntry(journalForDay);
+                  setShowModal(true);
+                }
+              };
 
               return (
                 <div
                   key={day}
+                  onClick={handleDayClick}
                   className={`h-20 border rounded-lg p-2 ${
                     hasData ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'
-                  }`}
+                  } ${
+                    hasJournal ? 'cursor-pointer hover:bg-yellow-50' : ''
+                  } relative`}
                 >
-                  <div className="font-semibold text-sm text-gray-800 mb-1">
-                    {day}
+                  <div className="font-semibold text-sm text-gray-800 mb-1 flex items-center justify-between">
+                    <span>{day}</span>
+                    {hasJournal && (
+                      <span className="text-xs">📝</span>
+                    )}
                   </div>
                   {hasData && (
                     <div className="text-xs space-y-1">
@@ -195,8 +239,52 @@ export default function CalendarPage() {
               <div className="w-4 h-4 bg-blue-50 border border-blue-200 rounded mr-2"></div>
               <span className="text-blue-700">📊 Día con actividad</span>
             </div>
+            <div className="flex items-center">
+              <div className="w-4 h-4 bg-yellow-50 border border-yellow-200 rounded mr-2 flex items-center justify-center">
+                <span className="text-xs">📝</span>
+              </div>
+              <span className="text-yellow-700">📝 Día con diario</span>
+            </div>
           </div>
         </div>
+
+        {/* 日誌モーダル */}
+        {showModal && selectedEntry && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-96 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-xl font-semibold">{selectedEntry.title}</h3>
+                  <p className="text-sm text-gray-500">{selectedEntry.date}</p>
+                </div>
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="text-gray-500 hover:text-gray-700 text-xl"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                {selectedEntry.content}
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Link 
+                  href={`/journal`}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  onClick={() => setShowModal(false)}
+                >
+                  日誌ページで編集
+                </Link>
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  閉じる
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

@@ -101,6 +101,13 @@ export default function Home() {
           >
             📅 Calendario Mensual
           </Link>
+          
+          <Link
+            href="/journal"
+            className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-teal-700 transition-colors"
+          >
+            📝 日誌
+          </Link>
         </div>
       </div>
     </main>
