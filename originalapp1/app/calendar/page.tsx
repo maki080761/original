@@ -40,16 +40,16 @@ export default function CalendarPage() {
 
   // 選択された月の日別データを取得
   const getDailyData = () => {
-    const dailyData: Record<string, { income: number, expense: number, hasJournal: boolean }> = {};
-    
+    const dailyData: Record<string, { shiftIncome: number, extraIncome: number, expense: number, hasJournal: boolean }> = {};
+
     // シフト収入を集計
     shifts.forEach(shift => {
       if (shift.date.startsWith(selectedMonth)) {
         const day = shift.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
+          dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
         }
-        dailyData[day].income += shift.totalIncome;
+        dailyData[day].shiftIncome += shift.totalIncome;
       }
     });
 
@@ -58,9 +58,9 @@ export default function CalendarPage() {
       if (income.date.startsWith(selectedMonth)) {
         const day = income.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
+          dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
         }
-        dailyData[day].income += income.amount;
+        dailyData[day].extraIncome += income.amount;
       }
     });
 
@@ -69,7 +69,7 @@ export default function CalendarPage() {
       if (expense.date.startsWith(selectedMonth)) {
         const day = expense.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
+          dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
         }
         dailyData[day].expense += expense.amount;
       }
@@ -80,7 +80,7 @@ export default function CalendarPage() {
       if (entry.date.startsWith(selectedMonth)) {
         const day = entry.date.split('-')[2];
         if (!dailyData[day]) {
-          dailyData[day] = { income: 0, expense: 0, hasJournal: false };
+          dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
         }
         dailyData[day].hasJournal = true;
       }
@@ -175,7 +175,7 @@ export default function CalendarPage() {
 
               const dayKey = String(day).padStart(2, '0');
               const data = dailyData[dayKey];
-              const hasData = data && (data.income > 0 || data.expense > 0);
+              const hasData = data && (data.shiftIncome > 0 || data.extraIncome > 0 || data.expense > 0);
               const hasJournal = data && data.hasJournal;
               const fullDate = `${selectedMonth}-${dayKey}`;
               const journalForDay = journalEntries.find(entry => entry.date === fullDate);
@@ -205,9 +205,16 @@ export default function CalendarPage() {
                   </div>
                   {hasData && (
                     <div className="text-xs space-y-1">
-                      {data.income > 0 && (
-                        <div className="text-green-600 font-medium">
-                          +¥{data.income.toLocaleString()}
+                      {data.shiftIncome > 0 && (
+                        <div className="text-green-600 font-medium flex items-center">
+                          <span className="text-xs mr-1">⏰</span>
+                          ¥{data.shiftIncome.toLocaleString()}
+                        </div>
+                      )}
+                      {data.extraIncome > 0 && (
+                        <div className="text-blue-600 font-medium flex items-center">
+                          <span className="text-xs mr-1">🌟</span>
+                          ¥{data.extraIncome.toLocaleString()}
                         </div>
                       )}
                       {data.expense > 0 && (
@@ -228,22 +235,30 @@ export default function CalendarPage() {
           <h3 className="text-sm font-semibold text-gray-800 mb-3">📖 Leyenda</h3>
           <div className="flex flex-wrap gap-4 text-xs">
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-100 border border-green-300 rounded mr-2"></div>
-              <span className="text-green-700">💰 Ingresos (+)</span>
+              <div className="w-4 h-4 bg-green-100 border border-green-300 rounded mr-2 flex items-center justify-center">
+                <span className="text-xs">⏰</span>
+              </div>
+              <span className="text-green-700">⏰ Trabajo</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-4 h-4 bg-blue-100 border border-blue-300 rounded mr-2 flex items-center justify-center">
+                <span className="text-xs">🌟</span>
+              </div>
+              <span className="text-blue-700">🌟 Extra</span>
             </div>
             <div className="flex items-center">
               <div className="w-4 h-4 bg-red-100 border border-red-300 rounded mr-2"></div>
-              <span className="text-red-700">💸 Gastos (-)</span>
+              <span className="text-red-700">💸 Gastos</span>
             </div>
             <div className="flex items-center">
               <div className="w-4 h-4 bg-blue-50 border border-blue-200 rounded mr-2"></div>
               <span className="text-blue-700">📊 Día con actividad</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-yellow-50 border border-yellow-200 rounded mr-2 flex items-center justify-center">
+              <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded mr-2 flex items-center justify-center">
                 <span className="text-xs">📝</span>
               </div>
-              <span className="text-yellow-700">📝 Día con diario</span>
+              <span className="text-gray-700">📝 Día con diario</span>
             </div>
           </div>
         </div>

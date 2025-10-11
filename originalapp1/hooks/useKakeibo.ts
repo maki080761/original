@@ -8,6 +8,8 @@ export const useKakeibo = () => {
   const [extraIncomes, setExtraIncomes] = useState<ExtraIncomeData[]>([]);
   const [balance, setBalance] = useState<BalanceData>({
     totalIncome: 0,
+    shiftIncome: 0,
+    extraIncome: 0,
     totalExpense: 0,
     balance: 0,
   });

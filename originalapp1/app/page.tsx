@@ -38,18 +38,34 @@ export default function Home() {
             </span>
           </div>
           
-          {/* 収入・支出の内訳 */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* 収入・支出の詳細内訳 */}
+          <div className="grid grid-cols-3 gap-3">
             <div className="text-center">
-              <div className="text-sm text-gray-600">Ingresos</div>
-              <div className="text-lg font-semibold text-green-600">
-                ¥{balance.totalIncome.toLocaleString()}
+              <div className="text-xs text-gray-600">Trabajo</div>
+              <div className="text-sm font-semibold text-green-600">
+                ¥{balance.shiftIncome.toLocaleString()}
               </div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-600">Gastos</div>
-              <div className="text-lg font-semibold text-red-600">
+              <div className="text-xs text-gray-600">Extra</div>
+              <div className="text-sm font-semibold text-blue-600">
+                ¥{balance.extraIncome.toLocaleString()}
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-xs text-gray-600">Gastos</div>
+              <div className="text-sm font-semibold text-red-600">
                 ¥{balance.totalExpense.toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          {/* 総収入表示 */}
+          <div className="mt-3 pt-3 border-t border-amber-200">
+            <div className="text-center">
+              <div className="text-xs text-gray-600">Total Ingresos</div>
+              <div className="text-lg font-semibold text-green-600">
+                ¥{balance.totalIncome.toLocaleString()}
               </div>
             </div>
           </div>

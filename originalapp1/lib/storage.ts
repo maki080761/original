@@ -152,15 +152,17 @@ export const calculateBalance = (): BalanceData => {
   const shifts = shiftStorage.getAll();
   const expenses = expenseStorage.getAll();
   const extraIncomes = extraIncomeStorage.getAll();
-  
+
   const shiftIncome = shifts.reduce((sum, shift) => sum + shift.totalIncome, 0);
   const extraIncome = extraIncomes.reduce((sum, income) => sum + income.amount, 0);
   const totalIncome = shiftIncome + extraIncome;
   const totalExpense = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = totalIncome - totalExpense;
-  
+
   return {
     totalIncome,
+    shiftIncome,
+    extraIncome,
     totalExpense,
     balance,
   };

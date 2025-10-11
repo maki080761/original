@@ -20,6 +20,8 @@ export interface ExpenseData {
 
 export interface BalanceData {
   totalIncome: number;
+  shiftIncome: number;
+  extraIncome: number;
   totalExpense: number;
   balance: number;
 }
