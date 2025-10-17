@@ -175,6 +175,8 @@ export const useKakeibo = () => {
   const getMonthlySummary = () => {
     const summaryMap = new Map<string, {
       month: string,
+      shiftIncome: number,
+      extraIncome: number,
       totalIncome: number,
       totalExpense: number,
       balance: number,
@@ -190,6 +192,8 @@ export const useKakeibo = () => {
       if (!summaryMap.has(month)) {
         summaryMap.set(month, {
           month,
+          shiftIncome: 0,
+          extraIncome: 0,
           totalIncome: 0,
           totalExpense: 0,
           balance: 0,
@@ -200,9 +204,8 @@ export const useKakeibo = () => {
         });
       }
       const summary = summaryMap.get(month)!;
-      summary.totalIncome += shift.totalIncome;
+      summary.shiftIncome += shift.totalIncome;
       summary.shiftCount++;
-      summary.balance = summary.totalIncome - summary.totalExpense;
     });
 
     // 臨時収入データを月別に集計
@@ -211,6 +214,8 @@ export const useKakeibo = () => {
       if (!summaryMap.has(month)) {
         summaryMap.set(month, {
           month,
+          shiftIncome: 0,
+          extraIncome: 0,
           totalIncome: 0,
           totalExpense: 0,
           balance: 0,
@@ -221,9 +226,8 @@ export const useKakeibo = () => {
         });
       }
       const summary = summaryMap.get(month)!;
-      summary.totalIncome += income.amount;
+      summary.extraIncome += income.amount;
       summary.extraIncomeCount++;
-      summary.balance = summary.totalIncome - summary.totalExpense;
     });
 
     // 支出データを月別に集計
@@ -232,6 +236,8 @@ export const useKakeibo = () => {
       if (!summaryMap.has(month)) {
         summaryMap.set(month, {
           month,
+          shiftIncome: 0,
+          extraIncome: 0,
           totalIncome: 0,
           totalExpense: 0,
           balance: 0,
@@ -244,13 +250,17 @@ export const useKakeibo = () => {
       const summary = summaryMap.get(month)!;
       summary.totalExpense += expense.amount;
       summary.expenseCount++;
-      
+
       // カテゴリ別集計を追加
       if (!summary.expenseByCategory[expense.category]) {
         summary.expenseByCategory[expense.category] = 0;
       }
       summary.expenseByCategory[expense.category] += expense.amount;
-      
+    });
+
+    // すべてのサマリーに対して、最終的な合計と残高を計算
+    summaryMap.forEach(summary => {
+      summary.totalIncome = summary.shiftIncome + summary.extraIncome;
       summary.balance = summary.totalIncome - summary.totalExpense;
     });
 

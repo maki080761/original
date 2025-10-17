@@ -100,14 +100,33 @@ export default function MonthlyPage() {
                   </div>
                 </div>
 
-                {/* Datos de ingresos y gastos */}
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">💰 Ingresos</div>
-                    <div className="text-lg font-semibold text-green-600">
-                      ¥{summary.totalIncome.toLocaleString()}
+                {/* Datos de ingresos separados por tipo */}
+                <div className="bg-green-50 rounded-lg p-3 mb-3">
+                  <div className="text-sm text-green-700 mb-2 font-medium">💰 Ingresos</div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">💼 Baito</span>
+                      <span className="font-semibold text-green-600">
+                        ¥{summary.shiftIncome.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-700">✨ Extra</span>
+                      <span className="font-semibold text-green-600">
+                        ¥{summary.extraIncome.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm pt-1 border-t border-green-200">
+                      <span className="text-gray-700 font-medium">合計</span>
+                      <span className="font-bold text-green-700">
+                        ¥{summary.totalIncome.toLocaleString()}
+                      </span>
                     </div>
                   </div>
+                </div>
+
+                {/* Datos de gastos y balance */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="text-center">
                     <div className="text-sm text-gray-600 mb-1">💸 Gastos</div>
                     <div className="text-lg font-semibold text-red-600">
