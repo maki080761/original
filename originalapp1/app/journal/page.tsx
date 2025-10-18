@@ -20,6 +20,10 @@ export default function JournalPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [editDate, setEditDate] = useState('');
 
   useEffect(() => {
     const savedEntries = localStorage.getItem('journalEntries');
@@ -57,6 +61,38 @@ export default function JournalPage() {
       setEntries(updatedEntries);
       localStorage.setItem('journalEntries', JSON.stringify(updatedEntries));
     }
+  };
+
+  const startEditing = (entry: JournalEntry) => {
+    setEditingId(entry.id);
+    setEditTitle(entry.title);
+    setEditContent(entry.content);
+    setEditDate(entry.date);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditTitle('');
+    setEditContent('');
+    setEditDate('');
+  };
+
+  const saveEdit = () => {
+    if (!editTitle.trim() || !editContent.trim()) {
+      alert('タイトルと内容を入力してください');
+      return;
+    }
+
+    const updatedEntries = entries.map(entry =>
+      entry.id === editingId
+        ? { ...entry, title: editTitle.trim(), content: editContent.trim(), date: editDate }
+        : entry
+    );
+
+    setEntries(updatedEntries);
+    localStorage.setItem('journalEntries', JSON.stringify(updatedEntries));
+    cancelEditing();
+    alert('日誌を更新しました');
   };
 
   return (
@@ -132,22 +168,77 @@ export default function JournalPage() {
           entries.map((entry) => (
             <Card key={entry.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="text-xl font-semibold">{entry.title}</h3>
-                    <p className="text-sm text-gray-500">{entry.date}</p>
+                {editingId === entry.id ? (
+                  // 編集モード
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor={`edit-date-${entry.id}`}>日付</Label>
+                      <Input
+                        id={`edit-date-${entry.id}`}
+                        type="date"
+                        value={editDate}
+                        onChange={(e) => setEditDate(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`edit-title-${entry.id}`}>タイトル</Label>
+                      <Input
+                        id={`edit-title-${entry.id}`}
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`edit-content-${entry.id}`}>内容</Label>
+                      <textarea
+                        id={`edit-content-${entry.id}`}
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        rows={6}
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button onClick={saveEdit} className="flex-1">
+                        保存
+                      </Button>
+                      <Button onClick={cancelEditing} variant="outline" className="flex-1">
+                        キャンセル
+                      </Button>
+                    </div>
                   </div>
-                  <Button 
-                    onClick={() => deleteEntry(entry.id)}
-                    variant="destructive" 
-                    size="sm"
-                  >
-                    削除
-                  </Button>
-                </div>
-                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                  {entry.content}
-                </div>
+                ) : (
+                  // 表示モード
+                  <>
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="text-xl font-semibold">{entry.title}</h3>
+                        <p className="text-sm text-gray-500">{entry.date}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => startEditing(entry)}
+                          variant="outline"
+                          size="sm"
+                        >
+                          編集
+                        </Button>
+                        <Button
+                          onClick={() => deleteEntry(entry.id)}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          削除
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                      {entry.content}
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           ))
