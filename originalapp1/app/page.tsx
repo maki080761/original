@@ -2,9 +2,69 @@
 
 import Link from "next/link";
 import { useKakeibo } from "@/hooks/useKakeibo";
+import JSZip from 'jszip';
 
 export default function Home() {
   const { balance, loading } = useKakeibo();
+
+  const downloadBackup = async () => {
+    // LocalStorageから全データを取得
+    const shifts = localStorage.getItem('shifts');
+    const expenses = localStorage.getItem('expenses');
+    const extraIncomes = localStorage.getItem('extraIncomes');
+    const journalEntries = localStorage.getItem('journalEntries');
+
+    const shiftsData = shifts ? JSON.parse(shifts) : [];
+    const expensesData = expenses ? JSON.parse(expenses) : [];
+    const extraIncomesData = extraIncomes ? JSON.parse(extraIncomes) : [];
+    const journalEntriesData = journalEntries ? JSON.parse(journalEntries) : [];
+
+    // CSV変換関数
+    const arrayToCSV = (data: any[], headers: string[]) => {
+      if (data.length === 0) return headers.join(',') + '\n';
+      const rows = data.map(item =>
+        headers.map(header => {
+          const value = item[header] || '';
+          // カンマや改行を含む場合はダブルクォートで囲む
+          if (String(value).includes(',') || String(value).includes('\n')) {
+            return `"${String(value).replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',')
+      );
+      return headers.join(',') + '\n' + rows.join('\n');
+    };
+
+    // 収入CSV（シフト）
+    const shiftsCSV = arrayToCSV(shiftsData, ['date', 'startTime', 'endTime', 'hourlyWage', 'income']);
+
+    // 収入CSV（特別収入）
+    const extraIncomesCSV = arrayToCSV(extraIncomesData, ['date', 'amount', 'note']);
+
+    // 支出CSV
+    const expensesCSV = arrayToCSV(expensesData, ['date', 'amount', 'category']);
+
+    // 日誌CSV
+    const journalCSV = arrayToCSV(journalEntriesData, ['date', 'title', 'content']);
+
+    // ZIPファイルを作成
+    const zip = new JSZip();
+    zip.file('シフト収入.csv', '\uFEFF' + shiftsCSV); // BOM追加でExcelの文字化け対策
+    zip.file('特別収入.csv', '\uFEFF' + extraIncomesCSV);
+    zip.file('支出.csv', '\uFEFF' + expensesCSV);
+    zip.file('日誌.csv', '\uFEFF' + journalCSV);
+
+    // ZIPをダウンロード
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `家計簿データ_${new Date().toISOString().split('T')[0]}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   if (loading) {
     return (
@@ -124,6 +184,13 @@ export default function Home() {
           >
             📝 日誌
           </Link>
+
+          <button
+            onClick={downloadBackup}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-center hover:bg-blue-700 transition-colors"
+          >
+            💾 データをダウンロード
+          </button>
         </div>
       </div>
     </main>
