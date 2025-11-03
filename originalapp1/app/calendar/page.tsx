@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useKakeibo } from "@/hooks/useKakeibo";
+import { getJSTYearMonth } from "@/lib/dateUtils";
 
 interface JournalEntry {
   id: string;
@@ -20,8 +21,8 @@ export default function CalendarPage() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const now = new Date();
-    setSelectedMonth(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
+    // 日本時間で現在の年月を設定
+    setSelectedMonth(getJSTYearMonth());
 
     // 日誌データを読み込み
     const savedEntries = localStorage.getItem('journalEntries');

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useKakeibo } from "@/hooks/useKakeibo";
+import { getJSTDate } from "@/lib/dateUtils";
 
 const INCOME_SOURCES = [
   { id: "gift", name: "Propina", icon: "🎀", color: "bg-pink-100 border-pink-300" },
@@ -17,7 +18,7 @@ export default function ExtraIncomePage() {
   const [amount, setAmount] = useState("");
   const [selectedSource, setSelectedSource] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getJSTDate());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useKakeibo } from "@/hooks/useKakeibo";
 import { hourlyWageStorage, shiftTimeStorage } from "@/lib/storage";
+import { getJSTDate } from "@/lib/dateUtils";
 
 export default function ShiftPage() {
   const router = useRouter();
@@ -33,8 +34,8 @@ export default function ShiftPage() {
       setShifts(lastShiftData.shifts);
     }
     
-    // デフォルトで今日の日付を設定
-    setDate(new Date().toISOString().split('T')[0]);
+    // デフォルトで今日の日付を設定（日本時間）
+    setDate(getJSTDate());
   }, []);
 
   const calculateShiftIncome = (startTime: string, endTime: string) => {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useKakeibo } from "@/hooks/useKakeibo";
+import { getJSTDate } from "@/lib/dateUtils";
 
 const EXPENSE_CATEGORIES = [
   { id: "food", name: "Comida", icon: "🍽️", color: "bg-orange-100 border-orange-300" },
@@ -18,7 +19,7 @@ export default function ExpensePage() {
   const { addExpense } = useKakeibo();
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getJSTDate());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
