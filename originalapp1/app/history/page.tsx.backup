@@ -34,11 +34,8 @@ function HistoryContent() {
 
 
   const formatDateFull = (dateString: string) => {
-    // YYYY-MM-DD形式の文字列を YYYY/MM/DD 形式に変換（カレンダーと同じロジック）
-    const dateParts = dateString.split('-');
-    const year = dateParts[0];
-    const month = dateParts[1];
-    const day = dateParts[2];
+    // YYYY-MM-DD形式の文字列を YYYY/MM/DD 形式に変換
+    const [year, month, day] = dateString.split('-').map(Number);
     return `${year}/${month}/${day}`;
   };
 
@@ -268,13 +265,7 @@ function HistoryContent() {
                         {transaction.title}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {(() => {
-                          // YYYY-MM-DD形式の文字列から月と日を取得（カレンダーと同じロジック）
-                          const dateParts = transaction.date.split('-');
-                          const month = dateParts[1];
-                          const day = dateParts[2];
-                          return `${month}/${day}`;
-                        })()}
+                        {transaction.date.split('-')[1]}/{transaction.date.split('-')[2]}
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
