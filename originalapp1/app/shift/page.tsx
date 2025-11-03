@@ -79,7 +79,7 @@ export default function ShiftPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // 全シフトの入力チェック
     const invalidShifts = shifts.filter(shift => !shift.startTime || !shift.endTime);
     if (invalidShifts.length > 0) {
@@ -95,12 +95,12 @@ export default function ShiftPage() {
 
     try {
       const hourlyWageNum = parseFloat(hourlyWage);
-      
+
       // Registrar cada turno individualmente
       for (let i = 0; i < shifts.length; i++) {
         const shift = shifts[i];
         const shiftIncome = calculateShiftIncome(shift.startTime, shift.endTime);
-        
+
         const shiftData = {
           date,
           startTime: shift.startTime,

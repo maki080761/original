@@ -23,7 +23,7 @@ export default function ExpensePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!amount || !selectedCategory) {
       alert("🥺 Por favor selecciona cantidad y categoría");
       return;

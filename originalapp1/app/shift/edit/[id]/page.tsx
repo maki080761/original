@@ -62,7 +62,7 @@ export default function ShiftEditPage() {
         totalIncome: income
       };
 
-      await updateShift(shiftId, updatedData);
+      updateShift(shiftId, updatedData);
       
       // 時給を記憶（編集時も保存）
       hourlyWageStorage.save(parseFloat(hourlyWage));

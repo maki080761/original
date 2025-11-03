@@ -32,17 +32,6 @@ function HistoryContent() {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    // デバッグ: 入力された日付文字列を確認
-    console.log('formatDate input:', dateString);
-
-    // YYYY-MM-DD形式の文字列を直接パースして日付を取得
-    const [, month, day] = dateString.split('-').map(Number);
-    const result = `${month}/${day}`;
-
-    console.log('formatDate output:', result);
-    return result;
-  };
 
   const formatDateFull = (dateString: string) => {
     // YYYY-MM-DD形式の文字列を YYYY/MM/DD 形式に変換
@@ -51,12 +40,6 @@ function HistoryContent() {
   };
 
   const getAllTransactions = () => {
-    // デバッグ: 実際のデータを確認
-    console.log('=== データ確認 ===');
-    console.log('Shifts:', shifts);
-    console.log('Expenses:', expenses);
-    console.log('Extra Incomes:', extraIncomes);
-
     const shiftTransactions = shifts.map(shift => ({
       ...shift,
       type: "income" as const,
@@ -228,6 +211,7 @@ function HistoryContent() {
           </div>
         )}
 
+
         {/* タブ */}
         <div className="bg-amber-50 rounded-lg shadow-md mb-4 border border-amber-200">
           <div className="flex border-b">
@@ -281,7 +265,7 @@ function HistoryContent() {
                         {transaction.title}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {formatDate(transaction.date)}
+                        {transaction.date.split('-')[1]}/{transaction.date.split('-')[2]}
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
