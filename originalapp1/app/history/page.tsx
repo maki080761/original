@@ -38,6 +38,12 @@ function HistoryContent() {
     return `${month}/${day}`;
   };
 
+  const formatDateFull = (dateString: string) => {
+    // YYYY-MM-DD形式の文字列を YYYY/MM/DD 形式に変換
+    const [year, month, day] = dateString.split('-').map(Number);
+    return `${year}/${month}/${day}`;
+  };
+
   const getAllTransactions = () => {
     const shiftTransactions = shifts.map(shift => ({
       ...shift,
@@ -64,7 +70,7 @@ function HistoryContent() {
     }));
 
     return [...shiftTransactions, ...extraIncomeTransactions, ...expenseTransactions]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => b.date.localeCompare(a.date)); // 文字列比較でソート (YYYY-MM-DD形式なので正しくソートされる)
   };
 
   const getFilteredTransactions = () => {
@@ -129,7 +135,7 @@ function HistoryContent() {
   const getAvailableDates = () => {
     const allTransactions = getAllTransactions();
     const dates = [...new Set(allTransactions.map(t => t.date))];
-    return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+    return dates.sort((a, b) => b.localeCompare(a)); // 文字列比較でソート
   };
 
   // balanceオブジェクトから値を取得
@@ -191,7 +197,7 @@ function HistoryContent() {
                 <option value="">Todas las fechas</option>
                 {getAvailableDates().map((date) => (
                   <option key={date} value={date}>
-                    {new Date(date).toLocaleDateString('ja-JP')}
+                    {formatDateFull(date)}
                   </option>
                 ))}
               </select>
