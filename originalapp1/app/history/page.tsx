@@ -33,8 +33,9 @@ function HistoryContent() {
   }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${date.getMonth() + 1}/${date.getDate()}`;
+    // YYYY-MM-DD形式の文字列を直接パースして日付を取得
+    const [, month, day] = dateString.split('-').map(Number);
+    return `${month}/${day}`;
   };
 
   const getAllTransactions = () => {
