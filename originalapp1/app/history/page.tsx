@@ -275,6 +275,9 @@ function HistoryContent() {
                           const day = dateParts[2];
                           return `${month}/${day}`;
                         })()}
+                        <span className="ml-2 text-xs text-blue-600" style={{fontSize: '10px'}}>
+                          [保存: {transaction.date}]
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
