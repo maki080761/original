@@ -22,7 +22,7 @@ export default function CalendarPage() {
   useEffect(() => {
     const now = new Date();
     setSelectedMonth(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`);
-    
+
     // 日誌データを読み込み
     const savedEntries = localStorage.getItem('journalEntries');
     if (savedEntries) {
@@ -30,21 +30,15 @@ export default function CalendarPage() {
     }
   }, []);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">✨ Cargando calendario...</div>
-      </main>
-    );
-  }
-
   // 選択された月の日別データを取得
   const getDailyData = () => {
+    if (!selectedMonth) return {};
+
     const dailyData: Record<string, { shiftIncome: number, extraIncome: number, expense: number, hasJournal: boolean }> = {};
 
     // シフト収入を集計
     shifts.forEach(shift => {
-      if (shift.date.startsWith(selectedMonth)) {
+      if (shift.date && shift.date.startsWith(selectedMonth)) {
         const day = shift.date.split('-')[2];
         if (!dailyData[day]) {
           dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
@@ -55,7 +49,7 @@ export default function CalendarPage() {
 
     // 臨時収入を集計
     extraIncomes.forEach(income => {
-      if (income.date.startsWith(selectedMonth)) {
+      if (income.date && income.date.startsWith(selectedMonth)) {
         const day = income.date.split('-')[2];
         if (!dailyData[day]) {
           dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
@@ -66,7 +60,7 @@ export default function CalendarPage() {
 
     // 支出を集計
     expenses.forEach(expense => {
-      if (expense.date.startsWith(selectedMonth)) {
+      if (expense.date && expense.date.startsWith(selectedMonth)) {
         const day = expense.date.split('-')[2];
         if (!dailyData[day]) {
           dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
@@ -77,7 +71,7 @@ export default function CalendarPage() {
 
     // 日誌データを集計
     journalEntries.forEach(entry => {
-      if (entry.date.startsWith(selectedMonth)) {
+      if (entry.date && entry.date.startsWith(selectedMonth)) {
         const day = entry.date.split('-')[2];
         if (!dailyData[day]) {
           dailyData[day] = { shiftIncome: 0, extraIncome: 0, expense: 0, hasJournal: false };
@@ -91,15 +85,28 @@ export default function CalendarPage() {
 
   // カレンダーの日付配列を生成
   const generateCalendarDays = () => {
+    if (!selectedMonth) return [];
+
     const [year, month] = selectedMonth.split('-').map(Number);
+
+    // その月の1日（JavaScriptのDateは月が0-11なので month-1）
     const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
-    const daysInMonth = lastDay.getDate();
+
+    // その月の日数を取得
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    // 月初の曜日（0 = 日曜日, 1 = 月曜日, ..., 6 = 土曜日）
     const startDayOfWeek = firstDay.getDay();
+
+    // デバッグログ
+    console.log(`=== ${year}年${month}月のカレンダー生成 ===`);
+    console.log(`selectedMonth: ${selectedMonth}`);
+    console.log(`1日の曜日: ${startDayOfWeek} (${['日', '月', '火', '水', '木', '金', '土'][startDayOfWeek]})`);
+    console.log(`日数: ${daysInMonth}日`);
 
     const days = [];
 
-    // 前月の空白日を追加
+    // 前月の空白日を追加（週の開始は日曜日）
     for (let i = 0; i < startDayOfWeek; i++) {
       days.push(null);
     }
@@ -109,8 +116,23 @@ export default function CalendarPage() {
       days.push(day);
     }
 
+    // 最後の週を7日で揃えるために空白を追加
+    const totalCells = days.length;
+    const remainingCells = totalCells % 7;
+    if (remainingCells !== 0) {
+      for (let i = 0; i < 7 - remainingCells; i++) {
+        days.push(null);
+      }
+    }
+
+    console.log(`総セル数: ${days.length}`);
+    console.log(`最初の14要素:`, days.slice(0, 14));
+
     return days;
   };
+
+  const dailyData = getDailyData();
+  const calendarDays = generateCalendarDays();
 
   const formatMonth = (monthString: string) => {
     const [year, month] = monthString.split('-');
@@ -121,9 +143,15 @@ export default function CalendarPage() {
     return `${monthNames[parseInt(month) - 1]} ${year}`;
   };
 
-  const dailyData = getDailyData();
-  const calendarDays = generateCalendarDays();
   const weekDays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">✨ Cargando calendario...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen" style={{backgroundColor: '#fefcf7'}}>
