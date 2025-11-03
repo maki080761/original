@@ -33,9 +33,15 @@ function HistoryContent() {
   }
 
   const formatDate = (dateString: string) => {
+    // デバッグ: 入力された日付文字列を確認
+    console.log('formatDate input:', dateString);
+
     // YYYY-MM-DD形式の文字列を直接パースして日付を取得
     const [, month, day] = dateString.split('-').map(Number);
-    return `${month}/${day}`;
+    const result = `${month}/${day}`;
+
+    console.log('formatDate output:', result);
+    return result;
   };
 
   const formatDateFull = (dateString: string) => {
@@ -45,6 +51,12 @@ function HistoryContent() {
   };
 
   const getAllTransactions = () => {
+    // デバッグ: 実際のデータを確認
+    console.log('=== データ確認 ===');
+    console.log('Shifts:', shifts);
+    console.log('Expenses:', expenses);
+    console.log('Extra Incomes:', extraIncomes);
+
     const shiftTransactions = shifts.map(shift => ({
       ...shift,
       type: "income" as const,
