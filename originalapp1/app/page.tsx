@@ -36,13 +36,13 @@ export default function Home() {
     };
 
     // 収入CSV（シフト）
-    const shiftsCSV = arrayToCSV(shiftsData, ['date', 'startTime', 'endTime', 'hourlyWage', 'income']);
+    const shiftsCSV = arrayToCSV(shiftsData, ['date', 'startTime', 'endTime', 'hourlyWage', 'totalIncome']);
 
     // 収入CSV（特別収入）
-    const extraIncomesCSV = arrayToCSV(extraIncomesData, ['date', 'amount', 'note']);
+    const extraIncomesCSV = arrayToCSV(extraIncomesData, ['date', 'amount', 'source', 'sourceName', 'sourceIcon', 'description']);
 
     // 支出CSV
-    const expensesCSV = arrayToCSV(expensesData, ['date', 'amount', 'category']);
+    const expensesCSV = arrayToCSV(expensesData, ['date', 'amount', 'category', 'categoryName', 'categoryIcon']);
 
     // 日誌CSV
     const journalCSV = arrayToCSV(journalEntriesData, ['date', 'title', 'content']);
