@@ -20,7 +20,7 @@ export default function Home() {
     const journalEntriesData = journalEntries ? JSON.parse(journalEntries) : [];
 
     // CSV変換関数
-    const arrayToCSV = (data: any[], headers: string[]) => {
+    const arrayToCSV = (data: Record<string, unknown>[], headers: string[]) => {
       if (data.length === 0) return headers.join(',') + '\n';
       const rows = data.map(item =>
         headers.map(header => {
