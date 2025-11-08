@@ -8,10 +8,10 @@ export default function Home() {
   const { balance, loading } = useKakeibo();
 
   const downloadBackup = async () => {
-    // LocalStorageから全データを取得
-    const shifts = localStorage.getItem('shifts');
-    const expenses = localStorage.getItem('expenses');
-    const extraIncomes = localStorage.getItem('extraIncomes');
+    // LocalStorageから全データを取得（正しいキー名を使用）
+    const shifts = localStorage.getItem('kakeibo_shifts');
+    const expenses = localStorage.getItem('kakeibo_expenses');
+    const extraIncomes = localStorage.getItem('kakeibo_extra_incomes');
     const journalEntries = localStorage.getItem('journalEntries');
 
     const shiftsData = shifts ? JSON.parse(shifts) : [];
