@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useKakeibo } from "@/hooks/useKakeibo";
-import JSZip from 'jszip';
 
 export default function Home() {
   const { balance, loading } = useKakeibo();
 
   const downloadBackup = async () => {
+    // JSZipを動的にインポート（必要な時だけ読み込む）
+    const JSZip = (await import('jszip')).default;
+
     // LocalStorageから全データを取得（正しいキー名を使用）
     const shifts = localStorage.getItem('kakeibo_shifts');
     const expenses = localStorage.getItem('kakeibo_expenses');
