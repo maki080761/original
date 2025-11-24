@@ -49,6 +49,8 @@ export async function updateSession(request: NextRequest) {
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
   const { data } = await supabase.auth.getClaims();
+  // 将来的に認証を有効化する場合に使用
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const user = data?.claims;
 
   // 認証チェックを無効化（ログイン不要で全機能を使用可能にする）
