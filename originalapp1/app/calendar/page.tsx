@@ -179,7 +179,8 @@ export default function CalendarPage() {
               type="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
             />
           </div>
         </div>
@@ -220,11 +221,12 @@ export default function CalendarPage() {
                 <div
                   key={day}
                   onClick={handleDayClick}
-                  className={`h-20 border rounded-lg p-2 ${
+                  className={`min-h-[80px] border rounded-lg p-2 ${
                     hasData ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'
                   } ${
-                    hasJournal ? 'cursor-pointer hover:bg-yellow-50' : ''
+                    hasJournal ? 'cursor-pointer hover:bg-yellow-50 active:bg-yellow-100' : ''
                   } relative`}
+                  style={{ touchAction: 'manipulation' }}
                 >
                   <div className="font-semibold text-sm text-gray-800 mb-1 flex items-center justify-between">
                     <span>{day}</span>

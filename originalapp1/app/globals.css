@@ -66,3 +66,88 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* モバイル最適化 */
+@layer utilities {
+  /* タッチ操作の最適化 - 300msタップ遅延を削除 */
+  html {
+    touch-action: manipulation;
+  }
+
+  /* 入力フィールド以外の要素にタップハイライトを無効化 */
+  *:not(input):not(textarea):not(select) {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
+  /* 入力フィールドのモバイル最適化 */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  input[type="month"],
+  select,
+  textarea {
+    /* iOS Safari で自動ズームを防ぐ (16px以上が推奨) */
+    font-size: 16px !important;
+    /* 入力フィールドは通常のタッチ動作を許可 */
+    touch-action: auto;
+    /* iOSの影を削除しつつ、機能は保持 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* テキスト選択を明示的に許可 */
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    /* コンテキストメニューを許可 */
+    -webkit-touch-callout: default;
+    /* ポインターイベントを確実に有効化 */
+    pointer-events: auto;
+    /* フォーカス可能にする */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* フォーカス時のスタイルを確実に表示 */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* ボタンのタッチ最適化 */
+  button,
+  a {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  a {
+    cursor: pointer;
+    /* リンクのタップ遅延を削除 */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* カレンダーセルのタッチ最適化 */
+  [role="button"],
+  .cursor-pointer {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* スクロールの改善 */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* フォームの送信ボタンを無効化しない */
+  button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

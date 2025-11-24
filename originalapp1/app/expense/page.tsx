@@ -87,7 +87,8 @@ export default function ExpensePage() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
               required
             />
           </div>
@@ -102,7 +103,8 @@ export default function ExpensePage() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="500"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
               required
               min="1"
               step="1"
@@ -120,11 +122,12 @@ export default function ExpensePage() {
                   key={category.id}
                   type="button"
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`p-4 border-2 rounded-lg transition-all ${
+                  className={`p-4 border-2 rounded-lg transition-all min-h-[80px] ${
                     selectedCategory === category.id
                       ? `${category.color} border-current`
-                      : "bg-white border-gray-200 hover:border-gray-300"
+                      : "bg-white border-gray-200 hover:border-gray-300 active:border-gray-400"
                   }`}
+                  style={{ touchAction: 'manipulation' }}
                 >
                   <div className="text-2xl mb-1">{category.icon}</div>
                   <div className="text-sm font-medium text-gray-700">

@@ -152,7 +152,8 @@ export default function ShiftPage() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
               required
             />
           </div>
@@ -165,7 +166,8 @@ export default function ShiftPage() {
             <select
               value={shiftCount}
               onChange={(e) => updateShiftCount(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
             >
               <option value="1">1回</option>
               <option value="2">2回</option>
@@ -187,7 +189,8 @@ export default function ShiftPage() {
                     type="time"
                     value={shift.startTime}
                     onChange={(e) => updateShift(index, 'startTime', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-base min-h-[44px]"
+                    style={{ fontSize: '16px' }}
                     required
                   />
                 </div>
@@ -199,7 +202,8 @@ export default function ShiftPage() {
                     type="time"
                     value={shift.endTime}
                     onChange={(e) => updateShift(index, 'endTime', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-base min-h-[44px]"
+                    style={{ fontSize: '16px' }}
                     required
                   />
                 </div>
@@ -224,7 +228,8 @@ export default function ShiftPage() {
               value={hourlyWage}
               onChange={(e) => setHourlyWage(e.target.value)}
               placeholder={hourlyWage ? "" : "例: 1000（前回の時給・時間を記憶♪）"}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-base min-h-[44px]"
+              style={{ fontSize: '16px' }}
               required
               min="0"
               step="1"

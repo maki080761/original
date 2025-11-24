@@ -51,27 +51,28 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
+  // 認証チェックを無効化（ログイン不要で全機能を使用可能にする）
   // Define protected routes that require authentication
-  const protectedRoutes = [
-    "/protected",
-    "/shift",
-    "/expense", 
-    "/extra-income",
-    "/monthly",
-    "/history",
-    "/calendar"
-  ];
+  // const protectedRoutes = [
+  //   "/protected",
+  //   "/shift",
+  //   "/expense",
+  //   "/extra-income",
+  //   "/monthly",
+  //   "/history",
+  //   "/calendar"
+  // ];
 
-  const isProtectedRoute = protectedRoutes.some(route => 
-    request.nextUrl.pathname.startsWith(route)
-  );
+  // const isProtectedRoute = protectedRoutes.some(route =>
+  //   request.nextUrl.pathname.startsWith(route)
+  // );
 
-  if (isProtectedRoute && !user) {
-    // no user, redirect to login page
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
-    return NextResponse.redirect(url);
-  }
+  // if (isProtectedRoute && !user) {
+  //   // no user, redirect to login page
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = "/auth/login";
+  //   return NextResponse.redirect(url);
+  // }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:

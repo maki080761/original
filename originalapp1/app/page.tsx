@@ -137,14 +137,16 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href="/shift"
-              className="bg-green-600 text-white py-3 px-3 rounded-lg font-medium text-center block hover:bg-green-700 transition-colors text-sm"
+              className="bg-green-600 text-white py-3 px-3 rounded-lg font-medium text-center block hover:bg-green-700 active:bg-green-800 transition-colors text-sm min-h-[56px] flex items-center justify-center"
+              style={{ touchAction: 'manipulation' }}
             >
               ⏰ Turno de Trabajo
             </Link>
-            
+
             <Link
               href="/extra-income"
-              className="bg-yellow-600 text-white py-3 px-3 rounded-lg font-medium text-center block hover:bg-yellow-700 transition-colors text-sm"
+              className="bg-yellow-600 text-white py-3 px-3 rounded-lg font-medium text-center block hover:bg-yellow-700 active:bg-yellow-800 transition-colors text-sm min-h-[56px] flex items-center justify-center"
+              style={{ touchAction: 'manipulation' }}
             >
               🌟 Ingreso Extra
             </Link>
@@ -152,42 +154,48 @@ export default function Home() {
           
           <Link
             href="/expense"
-            className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-red-700 transition-colors"
+            className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-red-700 active:bg-red-800 transition-colors min-h-[56px] flex items-center justify-center"
+            style={{ touchAction: 'manipulation' }}
           >
             💸 Registrar Gastos
           </Link>
-          
+
           <Link
             href="/history"
-            className="w-full bg-gray-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-gray-700 transition-colors"
+            className="w-full bg-gray-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-gray-700 active:bg-gray-800 transition-colors min-h-[56px] flex items-center justify-center"
+            style={{ touchAction: 'manipulation' }}
           >
             📋 Ver Historial
           </Link>
-          
+
           <Link
             href="/monthly"
-            className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-purple-700 transition-colors"
+            className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-purple-700 active:bg-purple-800 transition-colors min-h-[56px] flex items-center justify-center"
+            style={{ touchAction: 'manipulation' }}
           >
             📅 Resumen Mensual
           </Link>
-          
+
           <Link
             href="/calendar"
-            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-indigo-700 transition-colors"
+            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-indigo-700 active:bg-indigo-800 transition-colors min-h-[56px] flex items-center justify-center"
+            style={{ touchAction: 'manipulation' }}
           >
             📅 Calendario Mensual
           </Link>
-          
+
           <Link
             href="/journal"
-            className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-teal-700 transition-colors"
+            className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg font-medium text-center block hover:bg-teal-700 active:bg-teal-800 transition-colors min-h-[56px] flex items-center justify-center"
+            style={{ touchAction: 'manipulation' }}
           >
             📝 日誌
           </Link>
 
           <button
             onClick={downloadBackup}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-center hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium text-center hover:bg-blue-700 active:bg-blue-800 transition-colors min-h-[56px]"
+            style={{ touchAction: 'manipulation' }}
           >
             💾 データをダウンロード
           </button>
