@@ -71,48 +71,57 @@
 @layer utilities {
   /* タッチ操作の最適化 - 300msタップ遅延を削除 */
   html {
-    touch-action: manipulation;
+    touch-action: pan-y pinch-zoom;
   }
 
-  /* 入力フィールド以外の要素にタップハイライトを無効化 */
-  *:not(input):not(textarea):not(select) {
-    -webkit-tap-highlight-color: transparent;
+  body {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  /* ボタン・リンクのみタップハイライトを制御 */
+  button:not(:disabled),
+  a:not([href*="#"]):not([role="textbox"]) {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
     -webkit-touch-callout: none;
   }
 
   /* 入力フィールドのモバイル最適化 */
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  input[type="time"],
-  input[type="month"],
+  input,
   select,
   textarea {
     /* iOS Safari で自動ズームを防ぐ (16px以上が推奨) */
     font-size: 16px !important;
     /* 入力フィールドは通常のタッチ動作を許可 */
-    touch-action: auto;
-    /* iOSの影を削除しつつ、機能は保持 */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    touch-action: auto !important;
     /* テキスト選択を明示的に許可 */
     -webkit-user-select: text !important;
+    -moz-user-select: text !important;
     user-select: text !important;
     /* コンテキストメニューを許可 */
-    -webkit-touch-callout: default;
+    -webkit-touch-callout: default !important;
     /* ポインターイベントを確実に有効化 */
-    pointer-events: auto;
-    /* フォーカス可能にする */
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    pointer-events: auto !important;
+    /* z-indexを確実に前面に */
+    position: relative;
+    z-index: 10;
+    /* タップ可能にする */
+    cursor: text;
+  }
+
+  /* 特定の入力タイプのスタイル調整 */
+  input[type="date"],
+  input[type="time"],
+  input[type="month"] {
+    cursor: pointer;
   }
 
   /* フォーカス時のスタイルを確実に表示 */
   input:focus,
   textarea:focus,
   select:focus {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid #3b82f6 !important;
     outline-offset: 2px;
+    z-index: 20;
   }
 
   /* ボタンのタッチ最適化 */
